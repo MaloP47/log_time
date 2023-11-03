@@ -1,3 +1,4 @@
+
 import datetime
 
 def enregistrer_temps():
@@ -66,8 +67,7 @@ def temps_restant_pour_le_mois():
             total_seconds += heures * 3600
 
     total_hours_worked = total_seconds / 3600
-
-    temps_restant = 140 - total_hours_worked
+    temps_restant_seconds = (140 * 3600) - total_seconds
 
     jours_restants = jours_ouvrables_restants_mois()
 
@@ -75,10 +75,18 @@ def temps_restant_pour_le_mois():
         print("Le mois est fini.")
         return
 
-    moyenne_par_jour = temps_restant / jours_restants
+    moyenne_par_jour_seconds = temps_restant_seconds / jours_restants
 
-    print(f"Temps restant pour 140h : {temps_restant:.2f} heures")
-    print(f"Temps moyen à travailler par jour pour le reste du mois : {moyenne_par_jour:.2f} heures")
+    # Convert temps_restant to hours and minutes
+    restant_hours = int(temps_restant_seconds // 3600)
+    restant_minutes = int((temps_restant_seconds % 3600) // 60)
+
+    # Convert moyenne_par_jour to hours and minutes
+    moyenne_heures = int(moyenne_par_jour_seconds // 3600)
+    moyenne_minutes = int((moyenne_par_jour_seconds % 3600) // 60)
+
+    print(f"Temps restant pour 140h : {restant_hours} heures et {restant_minutes} minutes")
+    print(f"Temps moyen à travailler par jour pour le reste du mois : {moyenne_heures} heures et {moyenne_minutes} minutes")
 
 def calculer_temps_total():
     with open("temps_de_presence.txt", "r") as fichier:
@@ -102,12 +110,15 @@ def calculer_temps_total():
             heures = float(action.split(" ")[1])
             total_seconds += heures * 3600
 
-    total_hours_worked = total_seconds / 3600
+   # Convert total_hours to hours and minutes
+    total_hours = int(total_seconds // 3600)
+    total_minutes = int((total_seconds % 3600) // 60)
 
-    print(f"Temps total travaillé jusqu'à présent: {total_hours_worked:.2f} heures")
-    temps_restant = 140 - total_hours_worked
-    print(f"Temps restant pour atteindre 140h : {temps_restant:.2f} heures")
-
+    print(f"Temps total travaillé jusqu'à présent: {total_hours} heures et {total_minutes} minutes")
+    temps_restant = (140 * 3600) - total_seconds  # Work with seconds for accuracy
+    restant_hours = int(temps_restant // 3600)
+    restant_minutes = int((temps_restant % 3600) // 60)
+    print(f"Temps restant pour atteindre 140h : {restant_hours} heures et {restant_minutes} minutes")
 
 def menu():
     while True:
@@ -134,4 +145,3 @@ def menu():
 
 if __name__ == "__main__":
     menu()
-
